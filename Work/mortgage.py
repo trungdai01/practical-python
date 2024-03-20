@@ -11,14 +11,18 @@ extra_payment_end_month = 108
 extra_payment = 1000
 
 while principal > 0:
-    principal = principal * (1 + rate/12) - payment
+    principal = principal * (1 + rate / 12) - payment
     if principal < 0:
         continue
-    # if count_extra_payment >= extra_payment_start_month or count_extra_payment <= extra_payment_end_month:
-    #     principal = principal - extra_payment
-    #     total_paid = total_paid + extra_payment
-    total_paid = total_paid + payment
     count_extra_payment = count_extra_payment + 1
-    print(count_extra_payment, total_paid, principal)
-    
-# print('Total paid', total_paid)
+    if (
+        count_extra_payment >= extra_payment_start_month
+        and count_extra_payment <= extra_payment_end_month
+    ):
+        principal = principal - extra_payment
+        total_paid = total_paid + extra_payment
+    total_paid = round(total_paid + payment, 2)
+    print(f'{count_extra_payment:3d} {total_paid:10.2f} {principal:10.2f}')
+
+print("Total paid", total_paid)
+# print('Total paid', )

@@ -5,19 +5,21 @@
 
 import sys
 import csv
+
+
 def read_list_tuples(filename):
     # file = open(filename, 'rt')
     total_cost = 0.0
     portfolio = []
-    with open(filename, 'rt') as file:
+    with open(filename, "rt") as file:
         rows = csv.reader(file)
         headers = next(rows)
         for line in rows:
-        # fields = line.split(',')
+            # fields = line.split(',')
             try:
                 t = (line[0], int(line[1]), float(line[2]))
                 portfolio.append(t)
-            # t = (t[0], 0, t[1])
+                # t = (t[0], 0, t[1])
                 shares = int(line[1])
                 price = float(line[2])
                 total_cost += t[1] * t[2]
@@ -25,9 +27,10 @@ def read_list_tuples(filename):
                 print("Could not parse", line)
     return portfolio
 
+
 def read_list_dict(filename):
     portfolio = []
-    with open(filename, 'rt') as file:
+    with open(filename, "rt") as file:
         rows = csv.reader(file)
         headers = next(rows)
         for row in rows:
@@ -38,9 +41,10 @@ def read_list_dict(filename):
             portfolio.append(row_dict)
     return portfolio
 
+
 def read_dict(filename):
     prices = {}
-    with open(filename, 'rt') as file:
+    with open(filename, "rt") as file:
         rows = csv.reader(file)
         for row in rows:
             try:
@@ -49,11 +53,10 @@ def read_dict(filename):
                 pass
     return prices
 
-                
-                
+
 # filename = sys.argv[1]
 # if filename == 'Data/prices.csv':
-#     prices = read_dict(filename)                
+#     prices = read_dict(filename)
 # else:
 #     if filename == '':
 #         filename = 'Data/portfolio.csv'
@@ -63,27 +66,29 @@ def read_dict(filename):
 
 # Exercise 2.7
 
-costs = read_list_dict('Data/portfolio.csv')
-prices = read_dict('Data/prices.csv')
+costs = read_list_dict("Data/portfolio.csv")
+prices = read_dict("Data/prices.csv")
 
 total_costs = 0.0
 total_value = 0.0
 for cost in costs:
-    total_costs += cost['shares'] * cost['price']
+    total_costs += cost["shares"] * cost["price"]
 for cost in costs:
-    total_value += prices[cost['name']] * cost['shares']
+    total_value += prices[cost["name"]] * cost["shares"]
 
 print("Current value", total_value)
 print("Gain", total_value - total_costs)
 
 # Exercise 2.9
 
+
 def make_report(portfolio, prices):
     list_portfolio = []
     for row in portfolio:
-        change = float(prices[row['name']]) - float(row['price'])
-        t = (row['name'], int(row['shares']), float(prices[row['name']]), change)
+        change = float(prices[row["name"]]) - float(row["price"])
+        t = (row["name"], int(row["shares"]), float(prices[row["name"]]), change)
         list_portfolio.append(t)
     return list_portfolio
+
 
 report = make_report(costs, prices)
