@@ -25,7 +25,8 @@ def listContainer(filename):
         rows = csv.reader(file)
         header = next(rows)
         for row in rows:
-            records.append((row[0], int(row[1]), float(row[2])))
+            item = (row[0], int(row[1]), float(row[2]))
+            records.append(item)
 
     return records
 
