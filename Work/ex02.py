@@ -48,7 +48,7 @@ def dictContainer(filename):
 
 
 prices = dictContainer("Data/prices.csv")
-print("Dict as container: ")
+print("Dict as container: \n")
 pprint(prices)
 
 
