@@ -22,7 +22,6 @@ while principal > 0:
         principal = principal - extra_payment
         total_paid = total_paid + extra_payment
     total_paid = round(total_paid + payment, 2)
-    print(f'{count_extra_payment:3d} {total_paid:10.2f} {principal:10.2f}')
+    print(f"{count_extra_payment:3d} {total_paid:10.2f} {principal:10.2f}")
 
 print("Total paid", total_paid)
-# print('Total paid', )

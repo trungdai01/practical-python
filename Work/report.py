@@ -1,94 +1,56 @@
 # report.py
 #
 # Exercise 2.4
-
-
 import sys
-import csv
+import fileparse
 
 
-def read_list_tuples(filename):
-    # file = open(filename, 'rt')
-    total_cost = 0.0
-    portfolio = []
-    with open(filename, "rt") as file:
-        rows = csv.reader(file)
-        headers = next(rows)
-        for line in rows:
-            # fields = line.split(',')
-            try:
-                t = (line[0], int(line[1]), float(line[2]))
-                portfolio.append(t)
-                # t = (t[0], 0, t[1])
-                shares = int(line[1])
-                price = float(line[2])
-                total_cost += t[1] * t[2]
-            except ValueError:
-                print("Could not parse", line)
-    return portfolio
+def read_portfolio(fileName: str) -> list:
+    return fileparse.parse_csv(
+        filename=fileName,
+        select=["name", "shares", "price"],
+        types=[str, int, float],
+    )
 
 
-def read_list_dict(filename):
-    portfolio = []
-    with open(filename, "rt") as file:
-        rows = csv.reader(file)
-        headers = next(rows)
-        for row in rows:
-            row_dict = {}
-            row_dict[headers[0]] = row[0]
-            row_dict[headers[1]] = int(row[1])
-            row_dict[headers[2]] = float(row[2])
-            portfolio.append(row_dict)
-    return portfolio
+def read_prices(fileName: str) -> dict:
+    return dict(fileparse.parse_csv(filename=fileName, has_headers=False, types=[str, float]))
 
 
-def read_dict(filename):
-    prices = {}
-    with open(filename, "rt") as file:
-        rows = csv.reader(file)
-        for row in rows:
-            try:
-                prices[row[0]] = float(row[1])
-            except IndexError:
-                pass
-    return prices
+def make_report_data(portfolio: list, prices: dict) -> list:
+    rows = []
+    for stock in portfolio:
+        cur_prices = prices[stock["name"]]
+        change = cur_prices - stock["price"]
+        summary = (stock["name"], stock["shares"], cur_prices, change)
+        rows.append(summary)
+    return rows
 
 
-# filename = sys.argv[1]
-# if filename == 'Data/prices.csv':
-#     prices = read_dict(filename)
-# else:
-#     if filename == '':
-#         filename = 'Data/portfolio.csv'
-#     cost_dict = read_list_dict(filename)
-#     cost_tuples = read_list_tuples(filename)
-# print('Total cost: ', f'{cost:0.2f}')
-
-# Exercise 2.7
-
-costs = read_list_dict("Data/portfolio.csv")
-prices = read_dict("Data/prices.csv")
-
-total_costs = 0.0
-total_value = 0.0
-for cost in costs:
-    total_costs += cost["shares"] * cost["price"]
-for cost in costs:
-    total_value += prices[cost["name"]] * cost["shares"]
-
-print("Current value", total_value)
-print("Gain", total_value - total_costs)
-
-# Exercise 2.9
+def print_report(report_data: list):
+    headers = ("Name", "Shares", "Price", "Change")
+    # print("%10s %10s %10s %10s" % headers)
+    print(" ".join(f"{header:>10}" for header in headers))
+    print(("-" * 10 + " ") * len(headers))
+    for name, shares, price, change in report_data:
+        price_str = "$" + str(price)
+        print(f"{name:>10s} {shares:>10d} {price_str:>10s} {change:>10.2f}")
 
 
-def make_report(portfolio, prices):
-    list_portfolio = []
-    for row in portfolio:
-        change = float(prices[row["name"]]) - float(row["price"])
-        t = (row["name"], int(row["shares"]), float(prices[row["name"]]), change)
-        list_portfolio.append(t)
-    return list_portfolio
+def portfolio_report(portfolio_data: str, prices_data: str):
+    portfolio = read_portfolio(portfolio_data)
+    prices = read_prices(prices_data)
+    summary = make_report_data(portfolio, prices)
+    print_report(summary)
 
 
-report = make_report(costs, prices)
+def main(argv):
+    if len(argv) != 3:
+        raise SystemExit(f"Usage: {argv[0]}" " portfile pricefile")
+    portfile = argv[1]
+    pricefile = argv[2]
+    portfolio_report(portfile, pricefile)
+
+
+if __name__ == "__main__":
+    main(sys.argv)

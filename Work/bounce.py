@@ -2,7 +2,7 @@
 #
 # Exercise 1.5
 height = 100
-bounce_back = 3/5
+bounce_back = 3 / 5
 bounces = 0
 
 while bounces < 10:
