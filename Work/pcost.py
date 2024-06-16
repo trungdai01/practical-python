@@ -3,12 +3,12 @@
 # Exercise 1.27
 
 import sys
-import report
+from report import read_portfolio
 
 
 def portfolio_cost(fileName):
-    records = report.read_portfolio(fileName=fileName)
-    return sum((s["shares"] * s["price"] for s in records))
+    records = read_portfolio(fileName=fileName)
+    return sum((s.cost() for s in records))
 
 
 def main(argv):

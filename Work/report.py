@@ -2,34 +2,38 @@
 #
 # Exercise 2.4
 import sys
-import fileparse
+from fileparse import parse_csv
+from stock import Stock
 
 
 def read_portfolio(fileName: str) -> list:
-    return fileparse.parse_csv(
-        filename=fileName,
-        select=["name", "shares", "price"],
-        types=[str, int, float],
-    )
+    with open(fileName, encoding="utf8") as file:
+        portdicts = parse_csv(
+            lines=file,
+            select=["name", "shares", "price"],
+            types=[str, int, float],
+        )
+    portfolio = [Stock(d["name"], d["shares"], d["price"]) for d in portdicts]
+    return portfolio
 
 
 def read_prices(fileName: str) -> dict:
-    return dict(fileparse.parse_csv(filename=fileName, has_headers=False, types=[str, float]))
+    with open(fileName, encoding="utf8") as file:
+        return dict(parse_csv(lines=file, has_headers=False, types=[str, float]))
 
 
 def make_report_data(portfolio: list, prices: dict) -> list:
     rows = []
-    for stock in portfolio:
-        cur_prices = prices[stock["name"]]
-        change = cur_prices - stock["price"]
-        summary = (stock["name"], stock["shares"], cur_prices, change)
+    for row in portfolio:
+        cur_prices = prices[row.name]
+        change = cur_prices - row.price
+        summary = (row.name, row.shares, cur_prices, change)
         rows.append(summary)
     return rows
 
 
 def print_report(report_data: list):
     headers = ("Name", "Shares", "Price", "Change")
-    # print("%10s %10s %10s %10s" % headers)
     print(" ".join(f"{header:>10}" for header in headers))
     print(("-" * 10 + " ") * len(headers))
     for name, shares, price, change in report_data:
