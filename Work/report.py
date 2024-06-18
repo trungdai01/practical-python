@@ -5,13 +5,18 @@ import sys
 from fileparse import parse_csv
 from stock import Stock
 from tableformat import *
+from portfolio import Portfolio
 
 
 def read_portfolio(fileName: str) -> list:
+    """
+    Read a stock portfolio file into a list of dictionaries with keys
+    name, shares, and price.
+    """
     with open(fileName, encoding="utf8") as file:
         portdicts = parse_csv(lines=file, select=["name", "shares", "price"], types=[str, int, float])
     portfolio = [Stock(d["name"], d["shares"], d["price"]) for d in portdicts]
-    return portfolio
+    return Portfolio(portfolio)
 
 
 def read_prices(fileName: str) -> dict:
@@ -43,7 +48,7 @@ def print_report(report_data: list, formatter: TableFormatter):
         formatter.row(rowdata)
 
 
-def portfolio_report(portfolio_data: str, prices_data: str, fmt: str):
+def portfolio_report(portfolio_data: str, prices_data: str, fmt: str = "txt"):
     portfolio = read_portfolio(portfolio_data)
     prices = read_prices(prices_data)
     summary = make_report_data(portfolio, prices)

@@ -51,6 +51,7 @@ class HTMLTableFormatter(TableFormatter):
     def row(self, rowdata):
         print(f"<tr>{''.join([f'<td>{data}</td>' for data in rowdata])}</tr>")
 
+
 class FormatError(Exception):
     pass
 
