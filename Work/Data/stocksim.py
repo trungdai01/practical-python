@@ -204,11 +204,12 @@ class LogPrinter(object):
         self.f.flush()
 
 
-m = MarketSimulator()
-m.add_history(history_file)
-m.reset(minutes("9:30am"))
+if __name__ == "__main__":
+    market = MarketSimulator()
+    market.add_history(history_file)
+    market.reset(minutes("9:30am"))
 
-m.register(BasicPrinter())
-m.register(LogPrinter("stocklog.csv"))
+    market.register(BasicPrinter())
+    market.register(LogPrinter("stocklog.csv"))
 
-m.run(1)
+    market.run(1)

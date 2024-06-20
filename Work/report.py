@@ -8,14 +8,15 @@ from tableformat import *
 from portfolio import Portfolio
 
 
-def read_portfolio(fileName: str) -> list:
+def read_portfolio(fileName: str, **opts) -> list:
     """
     Read a stock portfolio file into a list of dictionaries with keys
     name, shares, and price.
     """
     with open(fileName, encoding="utf8") as file:
-        portdicts = parse_csv(lines=file, select=["name", "shares", "price"], types=[str, int, float])
-    portfolio = [Stock(d["name"], d["shares"], d["price"]) for d in portdicts]
+        portdicts = parse_csv(lines=file, select=["name", "shares", "price"], types=[str, int, float], **opts)
+    # portfolio = [Stock(d["name"], d["shares"], d["price"]) for d in portdicts]
+    portfolio = [Stock(**d) for d in portdicts] # **d -> {d'name': , d'shares': , d'price': }
     return Portfolio(portfolio)
 
 
