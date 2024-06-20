@@ -4,20 +4,30 @@
 import sys
 from fileparse import parse_csv
 from stock import Stock
-from tableformat import *
+from tableformat import TableFormatter, create_formatter
 from portfolio import Portfolio
 
 
-def read_portfolio(fileName: str, **opts) -> list:
+# def read_portfolio(fileName: str, **opts) -> list:
+#     """
+#     Read a stock portfolio file into a list of dictionaries with keys
+#     name, shares, and price.
+#     """
+#     with open(fileName, encoding="utf8") as file:
+#         portdicts = parse_csv(lines=file, select=["name", "shares", "price"], types=[str, int, float], **opts)
+#     # portfolio = [Stock(d["name"], d["shares"], d["price"]) for d in portdicts]
+#     portfolio = [Stock(**d) for d in portdicts]  # **d -> {d'name': , d'shares': , d'price': }
+#     return Portfolio(portfolio)
+
+
+def read_portfolio(fileName: str) -> list:
     """
     Read a stock portfolio file into a list of dictionaries with keys
     name, shares, and price.
     """
-    with open(fileName, encoding="utf8") as file:
-        portdicts = parse_csv(lines=file, select=["name", "shares", "price"], types=[str, int, float], **opts)
-    # portfolio = [Stock(d["name"], d["shares"], d["price"]) for d in portdicts]
-    portfolio = [Stock(**d) for d in portdicts] # **d -> {d'name': , d'shares': , d'price': }
-    return Portfolio(portfolio)
+    with open(fileName, encoding="utf8") as line:
+        port = Portfolio.from_csv(line)
+    return port
 
 
 def read_prices(fileName: str) -> dict:

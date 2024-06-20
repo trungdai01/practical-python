@@ -1,5 +1,5 @@
 # pcost.py
-#
+
 # Exercise 1.27
 
 import sys
@@ -8,7 +8,8 @@ from report import read_portfolio
 
 def portfolio_cost(fileName):
     records = read_portfolio(fileName=fileName)
-    return sum((s.cost for s in records))
+    # return sum((s.cost for s in records))
+    return records.total_cost
 
 
 def main(argv):

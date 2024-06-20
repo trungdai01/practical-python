@@ -85,7 +85,7 @@ broker takes their 20% cut?
 >>>
 ```
 
-### Exercise 1.2: Getting help 
+### Exercise 1.2: Getting help
 
 Use the `help()` command to get help on the `abs()` function. Then use
 `help()` to get help on the `round()` function. Type `help()` just by

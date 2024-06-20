@@ -1,30 +1,72 @@
 # portfolio.py
 from collections import Counter
+from stock import Stock
+from fileparse import parse_csv
+
+# class Portfolio:
+
+#     def __init__(self, holdings):
+#         self._holdings = holdings
+
+#     def __iter__(self):
+#         return self._holdings.__iter__()
+
+#     def __len__(self):
+#         return len(self._holdings)
+
+#     def __getitem__(self, index):
+#         return self._holdings[index]
+
+#     def __contains__(self, name):
+#         return any(s.name == name for s in self._holdings)
+
+#     @property
+#     def total_cost(self):
+#         return sum(s.cost for s in self._holdings)
+
+#     def tabulate_shares(self):
+#         total_shares = Counter()
+#         for s in self._holdings:
+#             total_shares[s.name] += s.shares
+#         return total_shares
 
 
 class Portfolio:
+    def __init__(self):
+        self.holdings = []
 
-    def __init__(self, holdings):
-        self._holdings = holdings
+    def append(self, holding):
+        if not isinstance(holding, Stock):
+            raise TypeError("Expected a Stock instance")
+        self.holdings.append(holding)
+
+    @classmethod
+    def from_csv(cls, lines, **opts):
+        self = cls()
+        portdicts = parse_csv(lines, select=["name", "shares", "price"], types=[str, int, float], **opts)
+        for d in portdicts:
+            self.append(Stock(**d))
+
+        return self
 
     def __iter__(self):
-        return self._holdings.__iter__()
+        return self.holdings.__iter__()
 
     def __len__(self):
-        return len(self._holdings)
+        return len(self.holdings)
 
     def __getitem__(self, index):
-        return self._holdings[index]
+        return self.holdings[index]
 
     def __contains__(self, name):
-        return any(s.name == name for s in self._holdings)
+        return any(s.name == name for s in self.holdings)
 
     @property
     def total_cost(self):
-        return sum(s.cost for s in self._holdings)
+        return sum(s.cost for s in self.holdings)
 
     def tabulate_shares(self):
         total_shares = Counter()
-        for s in self._holdings:
+        for s in self.holdings:
             total_shares[s.name] += s.shares
         return total_shares
