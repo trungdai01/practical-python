@@ -1,7 +1,7 @@
 # portfolio.py
 from collections import Counter
-from stock import Stock
-from fileparse import parse_csv
+from .stock import Stock
+from .fileparse import parse_csv
 
 # class Portfolio:
 

@@ -3,7 +3,7 @@
 import os
 import time
 from typing import Generator
-from report import read_portfolio
+from .report import read_portfolio
 
 
 def follow(filename: str) -> Generator[str, None, None]:

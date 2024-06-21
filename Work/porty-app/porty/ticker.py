@@ -2,9 +2,9 @@
 
 import csv
 from typing import Iterator, Generator, Dict
-from follow import follow
-from report import read_portfolio
-from tableformat import create_formatter
+from .follow import follow
+from .report import read_portfolio
+from .tableformat import create_formatter
 
 
 def select_columns(rows, indices: list[int]) -> Generator[list, None, None]:
